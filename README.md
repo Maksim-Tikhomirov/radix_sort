@@ -55,4 +55,31 @@ Contains uniformly distributed values from 1.17549e-38 to 3.40282e+38
 Radix sort | Time 0.401897 sec, random element: 1.03343e+38
 std::sort  | Time 3.84228 sec, random element: 2.74816e+38
 Radix sort is 9.56037 times faster
+
+Radix sort is a linear time, linear space sorting algorithm.
+Unlike most other sorting algorithms, it doesn't use comparisons.
+It works with data on the level of individual bytes.
+Based on input, it builds byte histograms, based on them,
+it builds offset tables for reordering. Then it makes a pass,
+which consists of copying and reordering data. One pass per
+one byte of element type.
+The library implements radix sort for most built in
+arithmetic types. This implementation sorts, in ascending order,
+a contiguous array of elements of the following types:
+- 8/16/32/64 bit signed/unsigned integers
+- 32 bit floating point numbers.
+For 8 bit types, complexity is O(n) time, O(1) space
+For all other types, complexity is O(n) time, O(n) space.
+Calling interface:
+radix_sort(P, N, M) or radix_sort(P, N), where
+P is a raw pointer to data, N is a number of data elements,
+M is an optional pointer to memory buffer.
+The last argument(M) lets you provide memory buffer externally.
+There is no requirement for initialization of said memory buffer.
+This buffer should have at least the same size as data being sorted
+and will be used for copying data during reordering passes.
+If you don't provide the buffer, radix_sort allocates the
+buffer on its own and frees it afterwards. Specializations
+of radix_sort for 8 bit types don't allocate additional memory and
+don't take buffer as the last argument.
 ```
